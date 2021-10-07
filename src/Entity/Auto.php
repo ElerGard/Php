@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AutoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +43,16 @@ class Auto
      * @ORM\ManyToOne(targetEntity=Pokupatel::class, inversedBy="Autos")
      */
     private $pokupatel;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Buyer::class, mappedBy="Autos")
+     */
+    private $buyers;
+
+    public function __construct()
+    {
+        $this->buyers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,6 +115,33 @@ class Auto
     public function setPokupatel(?Pokupatel $pokupatel): self
     {
         $this->pokupatel = $pokupatel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Buyer[]
+     */
+    public function getBuyers(): Collection
+    {
+        return $this->buyers;
+    }
+
+    public function addBuyer(Buyer $buyer): self
+    {
+        if (!$this->buyers->contains($buyer)) {
+            $this->buyers[] = $buyer;
+            $buyer->addAuto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBuyer(Buyer $buyer): self
+    {
+        if ($this->buyers->removeElement($buyer)) {
+            $buyer->removeAuto($this);
+        }
 
         return $this;
     }

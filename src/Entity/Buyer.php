@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BuyerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,6 +41,16 @@ class Buyer implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $avatar;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Auto::class, inversedBy="buyers")
+     */
+    private $Autos;
+
+    public function __construct()
+    {
+        $this->Autos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -131,6 +143,30 @@ class Buyer implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Auto[]
+     */
+    public function getAutos(): Collection
+    {
+        return $this->Autos;
+    }
+
+    public function addAuto(Auto $auto): self
+    {
+        if (!$this->Autos->contains($auto)) {
+            $this->Autos[] = $auto;
+        }
+
+        return $this;
+    }
+
+    public function removeAuto(Auto $auto): self
+    {
+        $this->Autos->removeElement($auto);
 
         return $this;
     }

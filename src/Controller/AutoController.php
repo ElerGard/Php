@@ -59,4 +59,21 @@ class AutoController extends AbstractController
 
         return $this->redirect($this->generateUrl('auto'));
     }
+
+    /**
+     * @Route("/buy/{id}", name="buy")
+     */
+    public function buyAuto(Auto $auto){
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $user->addAuto($auto);
+        $auto->addBuyer($user);
+        $em->persist($user);
+        $em->flush();
+        $em->persist($auto);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('profile'));
+    }
 }

@@ -31,7 +31,8 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <td><a class="text-danger" href="{{ path('delete', {id: auto.id}) }}">Delete</a> </td>
                     {% elseif is_granted('ROLE_USER') %}
-                        <td>Buy</td>
+                        <td><a class="text-success" href="{{ path('buy', {id: auto.id}) }}">Buy</a> </td>
+
                     {% endif %}
                 </tr>
             {% endfor %}

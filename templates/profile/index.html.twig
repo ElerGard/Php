@@ -4,19 +4,45 @@
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper { margin: 1px; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
 <div class="example-wrapper">
-
     {% if is_granted('ROLE_ADMIN') %}
         <h1>Hello admin {{ user.username }}!</h1>
     {% else %}
         <h1>Hello {{ user.username }}!</h1>
     {% endif %}
+
     <p>This is your profile</p>
     <img src="{{ '/avatars/' ~ user.avatar }}">
 
+    {% if is_granted('ROLE_ADMIN') %}
+    <h1>It was hard to create</h1>
+    {% else %}
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <td>ID</td>
+            <td>Firm</td>
+            <td>Mark</td>
+            <td>Color</td>
+            <td>MaxPassangers</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for Auto in user.Autos %}
+            <tr>
+                <td>{{ Auto.id }}</td>
+                <td>{{ Auto.firm }}</td>
+                <td>{{ Auto.mark }}</td>
+                <td>{{ Auto.color }}</td>
+                <td>{{ Auto.maxPassanger }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 </div>
 {% endblock %}
