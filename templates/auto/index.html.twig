@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AutoController!{% endblock %}
+
+{% block body %}
+<h2>List of all autos</h2>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="http://164.90.174.17/auto/create" class="btn btn-primary">Add Car</a>
+    {% endif %}
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <td>ID</td>
+            <td>Firm</td>
+            <td>Mark</td>
+            <td>Color</td>
+            <td>MaxPassangers</td>
+            {% if is_granted('ROLE_USER') %}
+            <td>Action</td>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+            {% for auto in autos %}
+                <tr>
+                    <td>{{ auto.id }}</td>
+                    <td>{{ auto.firm }}</td>
+                    <td>{{ auto.mark }}</td>
+                    <td>{{ auto.color }}</td>
+                    <td>{{ auto.maxPassanger }}</td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td><a class="text-danger" href="{{ path('delete', {id: auto.id}) }}">Delete</a> </td>
+                    {% elseif is_granted('ROLE_USER') %}
+                        <td>Buy</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
