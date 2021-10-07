@@ -21,15 +21,13 @@ class AutoController extends AbstractController
     {
         $auto = $autoRepository->findAll();
 
-        //dump($auto);
-
         return $this->render('auto/index.html.twig', [
             'autos' => $auto
         ]);
     }
 
     /**
-     * @Route("/auto/create", name="sas")
+     * @Route("/auto/create", name="create")
      */
     public function create(Request $request) {
         $auto = new Auto();
@@ -44,7 +42,9 @@ class AutoController extends AbstractController
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('auto'));
+        return $this->render('auto/create.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
 
